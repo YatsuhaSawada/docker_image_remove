@@ -9,7 +9,13 @@ function App() {
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
+    //setGreetMsg(await invoke("greet", { name }));
+    //var ret = await invoke("docker_image", { name });
+    //const obj = JSON.parse(ret);
+    //const o = obj.ItemIdList[0];
+    setGreetMsg(await invoke("docker_image", { name }));
+
+    //{"ItemIdList":[{"Repository":"nginx","Tag":"latest","ImageId":"d453dd892d93","Created":"2","Size":"months"}]}
   }
 
   return (
