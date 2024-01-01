@@ -28,7 +28,7 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn docker_image(name: &str) -> String {
+fn docker_image() -> String {
     let cur = std::env::current_dir();
     println!(
         "{:?}",
@@ -36,6 +36,7 @@ fn docker_image(name: &str) -> String {
     );
     match cur {
         Ok(x) => {
+            /*
             let output = Command::new("docker") // 実行したいコマンド
                 .args(["images"])
                 .current_dir("/") // カレントディレクトリで実行
@@ -59,7 +60,20 @@ fn docker_image(name: &str) -> String {
                 };
                 o.ItemIdList.push(image_info);
             }
+            */
 
+            let mut o = DockerImags {
+                ItemIdList: Vec::new(),
+            };
+            let image_info = DockerImage {
+                Repository: String::from("sample2"),
+                Tag: String::from("1.2"),
+                ImageId: String::from("12345"),
+                Created: String::from("2023/01/15"),
+                Size: String::from("14562"),
+            };
+            o.ItemIdList.push(image_info);
+        
             let s = serde_json::to_string(&o).unwrap();
             s
         }
@@ -70,12 +84,17 @@ fn docker_image(name: &str) -> String {
     }
 }
 
+#[tauri::command]
+fn delete_docker_img(id: &str) -> String {
+    format!("Hello, {}! You've been greeted from Rust!", id)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
     fn it_works() {
-        let s = docker_image("");
+        let s = docker_image();
         println!("{}", s);
         assert_eq!(2 + 2, 4);
     }
@@ -83,7 +102,7 @@ mod tests {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, docker_image])
+        .invoke_handler(tauri::generate_handler![greet, docker_image, delete_docker_img])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

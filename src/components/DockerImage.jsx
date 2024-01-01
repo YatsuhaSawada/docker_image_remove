@@ -3,28 +3,42 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useTable } from "react-table";
 
-export default function DockerImage() {
-  const dataArray = [
-      { name: '田中', age: 25, city: '東京' },
-      { name: '高橋', age: 30, city: '大阪' },
-      { name: '佐藤', age: 35, city: '北海道' },
-  ];
+export default function DockerImage({data, handleUpdate}) {
+  async function deleteImg(id) {
+    //setImgList(await invoke("docker_image"));
+    console.log(`Deleting image with ID: ${id}`);
+    
+    console.log(await invoke("delete_docker_img", {id}));
+  };
+  const handleDeleteClick = (id) => {
+    // Call the deleteImg function with the provided image ID
+    deleteImg(id);
+    handleUpdate();
+  };
+  const dataArray = JSON.parse(data).ItemIdList;
   
   return (
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>City</th>
+          <th>Repository</th>
+          <th>Tag</th>
+          <th>ImageId</th>
+          <th>Created</th>
+          <th>Size</th>
         </tr>
       </thead>
       <tbody>
         {dataArray.map((item, index) => (
           <tr key={index}>
-            <td>{item.name}</td>
-            <td>{item.age}</td>
-            <td>{item.city}</td>
+            <td>{item.Repository}</td>
+            <td>{item.Tag}</td>
+            <td>{item.ImageId}</td>
+            <td>{item.Created}</td>
+            <td>{item.Size}</td>
+            <td>
+              <button onClick={()=>handleDeleteClick(item.ImageId)}>削除</button>
+            </td>
           </tr>
         ))}
       </tbody>
