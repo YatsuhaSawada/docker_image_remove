@@ -5,7 +5,7 @@ import "./App.css";
 import DockerImage from "./components/DockerImage";
 
 function App() {
-  const [imgList, setImgList] = useState("{\"ItemIdList\":[{\"Repository\":\"-\",\"Tag\":\"1.2\",\"ImageId\":\"12345\",\"Created\":\"2023/01/15\",\"Size\":\"14562\"}]}");
+  const [imgList, setImgList] = useState("{\"ItemIdList\":[{\"Repository\":\"-\",\"Tag\":\"-\",\"ImageId\":\"-\",\"Created\":\"-\",\"Size\":\"-\"}]}");
   const [name, setName] = useState("");
   async function update() {
     setImgList(await invoke("docker_image"));
