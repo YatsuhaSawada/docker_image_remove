@@ -1,7 +1,3 @@
-# Tauri + React
+# docker image remover
 
-This template should help get you started developing with Tauri and React in Vite.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+この成果物は`doker images`->`docker rmi image_id`の繰り返しをCLIで行うのが面倒なのでクリック連打でできるようにしたものです。Tauriの手習いで作ってみました。Docker詳しくなりたい人は`docker image prune`やタグでの管理やコンテナやイメージ管理のベストプラクティスを調べください。
