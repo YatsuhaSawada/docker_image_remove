@@ -72,6 +72,14 @@ fn docker_image() -> String {
 
 #[tauri::command]
 fn delete_docker_img(id: &str) -> String {
+    println!("{:?}", id);
+    let output = Command::new("docker") // 実行したいコマンド
+        .args(["rmi", id])
+        .current_dir("/") // カレントディレクトリで実行
+        .output()
+        .expect("failed to execute process");
+    let hello = output.stdout;
+    println!("{:?}", hello);
     format!("Hello, {}! You've been greeted from Rust!", id)
 }
 
