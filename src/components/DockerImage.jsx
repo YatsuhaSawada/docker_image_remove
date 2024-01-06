@@ -37,7 +37,7 @@ export default function DockerImage({data, handleUpdate}) {
             <td>{item.Created}</td>
             <td>{item.Size}</td>
             <td>
-              <button onClick={()=>handleDeleteClick(item.ImageId)}>削除</button>
+              <button onClick={()=>handleDeleteClick(item.ImageId)}>remove</button>
             </td>
           </tr>
         ))}
