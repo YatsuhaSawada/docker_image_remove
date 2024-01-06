@@ -20,12 +20,15 @@ struct DockerImage {
 struct DockerImags {
     ItemIdList: Vec<DockerImage>,
 }
-
+//docker image list --format "{{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedSince}}\t{{.Size}}"
 #[tauri::command]
 fn docker_image() -> String {
     //execute "docker images"
     let output = Command::new("docker")
-        .args(["images"])
+        .arg("image")
+        .arg("list")
+        .arg("--format")
+        .arg("{{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedSince}}\t{{.Size}}")
         .current_dir("/")
         .output();
     let output = match output {
@@ -34,13 +37,13 @@ fn docker_image() -> String {
     };
 
     let images = String::from(std::str::from_utf8(&output).unwrap());
-    let lines = images.lines().skip(1).collect::<Vec<&str>>();
+    let lines = images.lines().collect::<Vec<&str>>();
 
     let mut o = DockerImags {
         ItemIdList: Vec::new(),
     };
     for line in lines {
-        let parts: Vec<&str> = line.split_whitespace().collect();
+        let parts: Vec<&str> = line.split('\t').collect();
         let image_info = DockerImage {
             Repository: String::from(parts[0]),
             Tag: String::from(parts[1]),
