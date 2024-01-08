@@ -2,46 +2,35 @@ import React from "react";
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useTable } from "react-table";
+import DockerImageTable from "./DockerImageTable";
 
 export default function DockerImage({data, handleUpdate}) {
-  async function deleteImg(id) {
-    //setImgList(await invoke("docker_image"));
-    console.log(`Deleting image with ID: ${id}`);
-    
-    console.log(await invoke("delete_docker_img", {id}));
-  };
-  const handleDeleteClick = (id) => {
-    // Call the deleteImg function with the provided image ID
-    deleteImg(id);
-    handleUpdate();
-  };
-  const dataArray = JSON.parse(data).ItemIdList;
-  
+  const [imgList, setImgList] = useState("{\"ItemIdList\":[{\"Repository\":\"-\",\"Tag\":\"-\",\"ImageId\":\"-\",\"Created\":\"-\",\"Size\":\"-\"}]}");
+  async function update() {
+    setImgList(await invoke("docker_image"));
+  }
+
+  function handleUpdate() {
+    update();
+  }
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Repository</th>
-          <th>Tag</th>
-          <th>ImageId</th>
-          <th>Created</th>
-          <th>Size</th>
-        </tr>
-      </thead>
-      <tbody>
-        {dataArray.map((item, index) => (
-          <tr key={index}>
-            <td>{item.Repository}</td>
-            <td>{item.Tag}</td>
-            <td>{item.ImageId}</td>
-            <td>{item.Created}</td>
-            <td>{item.Size}</td>
-            <td>
-              <button onClick={()=>handleDeleteClick(item.ImageId)}>remove</button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="container">
+      <form
+        className="row"
+        onSubmit={(e) => {
+          e.preventDefault();
+          update();
+        }}
+      >
+      <button type="submit">Update</button>
+      </form>
+      {/* <details>
+        <summary>filter</summary>
+        <div className="toggleButton">
+          <input type="checkbox" id="check1" name="group1"/><label for="check1">Tag</label>
+        </div>
+      </details> */}
+      <DockerImageTable data={imgList} handleUpdate = {()=>{handleUpdate()}}/>
+    </div>
   );
 }
